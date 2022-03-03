@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('trial') {
             steps {
-                echo 'master'
+                echo 'this is on branch master'
             }
         }
     }
