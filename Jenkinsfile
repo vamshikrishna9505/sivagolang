@@ -8,7 +8,8 @@ pipeline {
             }
             steps {
                 sh 'go build'
-                sh 'go test ./...'
+                sh 'go test'
+                
             }
         }
         stage('deploy') {
@@ -18,6 +19,7 @@ pipeline {
                 VERSION_MAJOR = '0'
                 VERSION_MINOR = '1'
                 VERSION_PATCH = "${env.BUILD_NUMBER.toInteger() - BUILD_NUMBER_BASE.toInteger()}"
+            
             }
             when {
                 branch 'master'
@@ -25,7 +27,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', 'dockerhub') {
-                        def customImage = docker.build("riyaz1994/example:$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH", "-f ${dockerfile} /docker/app")
+                        def customImage = docker.build("riyaz1994/example:$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH")
                         customImage.push()
                     }
                 }
