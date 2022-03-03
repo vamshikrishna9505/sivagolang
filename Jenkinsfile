@@ -9,8 +9,6 @@ pipeline {
             }
             steps {
                 sh 'git clone https://github.com/Riyaz1994/blueocean.git'
-            }
-            steps {
                 sh 'go build'
             }
         }
