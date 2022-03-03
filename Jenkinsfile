@@ -1,18 +1,18 @@
 pipeline {
-    agent none
+    agent {
+        docker { image 'linuxacademycontent/jenkins_pipelines' }
+    }
     stages {
-        stage('build and test') {
-            agent { docker { image 'golang:1.14' } }
+        stage('build') {
             environment {
                 GOCACHE = '/tmp/gocache'
             }
             steps {
+                sh 'git clone https://github.com/Riyaz1994/blueocean.git'
                 sh 'go build'
-                sh 'go test ./...'
             }
         }
         stage('deploy') {
-            agent any
             environment {
                 BUILD_NUMBER_BASE = '0'
                 VERSION_MAJOR = '0'
