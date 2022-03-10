@@ -1,36 +1,17 @@
 pipeline {
-    agent none
+    agent { docker { image 'golang:1.14' } }
+    environment {
+        GOCACHE = '/tmp/gocache'
+    }
     stages {
-        stage('build and test') {
-            agent { docker { image 'golang:1.13' } }
-            environment {
-                GOCACHE = '/tmp/gocache'
-            }
+        stage('build') {
             steps {
                 sh 'go build'
-                sh 'go test'
-                
             }
         }
-        stage('deploy') {
-            agent any
-            environment {
-                BUILD_NUMBER_BASE = '0'
-                VERSION_MAJOR = '0'
-                VERSION_MINOR = '1'
-                VERSION_PATCH = "${env.BUILD_NUMBER.toInteger() - BUILD_NUMBER_BASE.toInteger()}"
-            
-            }
-            when {
-                branch 'master'
-            }
+        stage('test') {
             steps {
-                script {
-                    docker.withRegistry('', 'Dockerhub') {
-                        def customImage = docker.build("devaprasad/example:$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH")
-                        customImage.push()
-                    }
-                }
+                sh 'go test ./...'
             }
         }
     }
