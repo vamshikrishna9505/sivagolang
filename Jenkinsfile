@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', 'dockerhub') {
-                        def customImage = docker.build("vamshikrishna9505/example:$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH")
+                        def customImage = docker.build("vamshi9505/example:$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH")
                         customImage.push()
                     }
                 }
